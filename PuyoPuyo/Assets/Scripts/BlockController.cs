@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BlockController : MonoBehaviour
 {
+
+    [SerializeField] List<Sprite> spritePuyos;
+
     private float fallTimerMax = 0.5f;
     private float fallTimer;
 
@@ -13,6 +16,17 @@ public class BlockController : MonoBehaviour
     {
         gameManager  = manager;
         fallTimerMax = timerMax;
+
+        //子オブジェクトの画像をセット
+        foreach(Transform item in transform)
+        {
+            //ランダムな画像を持ってくる
+            int random = Random.Range(0 , spritePuyos.Count);
+            Sprite sprite = spritePuyos[random];
+
+            item.GetComponent<SpriteRenderer>().sprite = sprite;
+         }
+
     }
 
     private void Start( )
@@ -45,9 +59,19 @@ public class BlockController : MonoBehaviour
         {
             transform.Rotate(new Vector3(0,0,1) , 90);
             
+            //顔も回転させる
+            foreach(Transform item in transform)
+            {
+                item.transform.Rotate(new Vector3(0, 0, 1), -90);
+            }
+
             if (!gameManager.IsMovable(transform))
             {
                 transform.Rotate(new Vector3(0, 0, 1), -90);
+                foreach (Transform item in transform)
+                {
+                    item.transform.Rotate(new Vector3(0, 0, 1), 90);
+                }
             }
         }
 
